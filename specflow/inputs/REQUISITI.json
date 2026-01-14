@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "name": "specflow-seed",
+    "version": "0.1.0",
+    "updatedAt": "2024-04-01"
+  },
+  "functionalRequirements": [
+    {
+      "id": "RQ-01",
+      "title": "Create to-do",
+      "description": "A user can create a task by providing a title and an optional description.",
+      "acceptanceCriteria": ["AC-01", "AC-02"]
+    }
+  ],
+  "nonFunctionalRequirements": [
+    {
+      "id": "RQ-02",
+      "title": "Response time",
+      "description": "API response < 500ms for 95% of the requests."
+    }
+  ],
+  "useCases": [
+    {
+      "id": "UC-01",
+      "title": "User registers a new to-do",
+      "actor": "Authenticated user",
+      "description": "The user provides a title and optionally a description to create a to-do."
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "name": "specflow-seed",
+    "version": "0.1.0"
+  },
+  "scope": {
+    "in": [
+      "API endpoint to create to-dos",
+      "Validation of required fields"
+    ],
+    "out": [
+      "Authentication management",
+      "Web UI"
+    ]
+  },
+  "techStack": {
+    "runtime": "node",
+    "framework": "fastify",
+    "db": "postgresql",
+    "migrations": "prisma",
+    "testRunner": "vitest"
+  },
+  "useCases": [
+    {
+      "id": "UC-01",
+      "title": "Create to-do",
+      "actor": "Authenticated user",
+      "preconditions": ["User is logged in"],
+      "mainFlow": [
+        "1. The client sends POST /todos with title and description",
+        "2. The system validates required fields",
+        "3. The system persists the to-do and returns 201"
+      ],
+      "alternativeFlows": [
+        "A1. Empty title → return 422 with code TITLE_REQUIRED"
+      ],
+      "postconditions": ["To-do persisted"],
+      "errors": ["DB unavailable"]
+    }
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-01",
+      "useCase": "UC-01",
+      "given": "A valid payload",
+      "when": "POST /todos",
+      "then": "Responds 201 with the to-do payload",
+      "tests": ["tests/todos/create.todo.test.ts#AC-01"]
+    },
+    {
+      "id": "AC-02",
+      "useCase": "UC-01",
+      "given": "Missing title",
+      "when": "POST /todos",
+      "then": "Responds 422 with code TITLE_REQUIRED",
+      "tests": ["tests/todos/create.todo.test.ts#AC-02"]
+    }
+  ],
+  "contracts": {
+    "apis": [
+      {
+        "id": "API-01",
+        "method": "POST",
+        "path": "/todos",
+        "request": {
+          "schema": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "title": { "type": "string", "minLength": 3 },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "response": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "format": "uuid" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "errors": [
+          { "status": 422, "code": "TITLE_REQUIRED" }
+        ]
+      }
+    ]
+  },
+  "services": [
+    {
+      "name": "TodoService",
+      "responsibilities": ["Validate payload", "Create to-do"]
+    }
+  ],
+  "operations": [
+    {
+      "id": "OP-01",
+      "service": "TodoService",
+      "name": "createTodo",
+      "input": {
+        "schema": "CreateTodoInput"
+      },
+      "output": {
+        "schema": "Todo"
+      },
+      "errors": [
+        { "code": "TITLE_REQUIRED", "status": 422 }
+      ],
+      "sideEffects": ["db.insert(todos)"],
+      "acceptanceCriteria": ["AC-01", "AC-02"]
+    }
+  ],
+  "dataFlows": [
+    {
+      "id": "DF-01",
+      "useCase": "UC-01",
+      "steps": ["client -> api", "api -> service", "service -> db"],
+      "diagramMermaid": "flowchart TD\n  Client-->API\n  API-->Service\n  Service-->DB"
+    }
+  ],
+  "db": {
+    "tables": [
+      {
+        "name": "todos",
+        "purpose": "Stores user to-dos",
+        "columns": [
+          { "name": "id", "type": "uuid", "nullable": false },
+          { "name": "user_id", "type": "uuid", "nullable": false },
+          { "name": "title", "type": "varchar(120)", "nullable": false },
+          { "name": "description", "type": "text", "nullable": true }
+        ],
+        "indexes": ["idx_todos_user_id"],
+        "constraints": ["pk_todos", "fk_todos_user"],
+        "relations": ["todos.user_id -> users.id"]
+      }
+    ]
+  }
+}

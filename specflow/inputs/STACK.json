@@ -1,0 +1,26 @@
+{
+  "runtime": {
+    "name": "node",
+    "version": "20.x"
+  },
+  "framework": {
+    "name": "fastify",
+    "version": "4.x"
+  },
+  "database": {
+    "engine": "postgresql",
+    "version": "15",
+    "client": "prisma"
+  },
+  "migrations": {
+    "tool": "prisma migrate"
+  },
+  "testing": {
+    "runner": "vitest",
+    "coverage": true
+  },
+  "tooling": {
+    "packageManager": "npm",
+    "ci": "github-actions"
+  }
+}

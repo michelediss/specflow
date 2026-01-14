@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codex/specflow/tasks.schema.json",
+  "type": "object",
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "pattern": "^T-\\d{2}$" },
+          "title": { "type": "string" },
+          "acceptanceCriteria": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["id", "title", "acceptanceCriteria"]
+      }
+    }
+  },
+  "required": ["tasks"]
+}

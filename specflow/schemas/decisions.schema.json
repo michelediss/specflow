@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codex/specflow/decisions.schema.json",
+  "type": "object",
+  "properties": {
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "date": { "type": "string", "format": "date" },
+          "status": { "type": "string" },
+          "title": { "type": "string" }
+        },
+        "required": ["id", "date", "status", "title"]
+      }
+    }
+  },
+  "required": ["decisions"]
+}

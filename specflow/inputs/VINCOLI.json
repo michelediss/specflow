@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "name": "specflow-seed",
+    "version": "0.1.0",
+    "updatedAt": "2024-04-01"
+  },
+  "constraints": [
+    {
+      "id": "C-01",
+      "type": "security",
+      "description": "All data at rest must live on encrypted storage."
+    },
+    {
+      "id": "C-02",
+      "type": "budget",
+      "description": "Use only managed open-source services."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codex/specflow/spec.schema.json",
+  "type": "object",
+  "properties": {
+    "meta": { "type": "object" },
+    "useCases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "pattern": "^UC-\\d{2}$" },
+          "title": { "type": "string" }
+        },
+        "required": ["id", "title"]
+      }
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "pattern": "^AC-\\d{2}$" },
+          "useCase": { "type": "string" },
+          "tests": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["id", "useCase", "tests"]
+      }
+    }
+  },
+  "required": ["meta", "useCases", "acceptanceCriteria"]
+}

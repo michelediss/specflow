@@ -1,0 +1,12 @@
+{
+  "meta": { "name": "project-name", "version": "0.1.0" },
+  "scope": { "in": [], "out": [] },
+  "techStack": {},
+  "useCases": [],
+  "acceptanceCriteria": [],
+  "contracts": { "apis": [] },
+  "services": [],
+  "operations": [],
+  "dataFlows": [],
+  "db": { "tables": [] }
+}

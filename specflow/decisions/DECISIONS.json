@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "id": "D-01",
+      "date": "2024-04-01",
+      "status": "active",
+      "title": "Fastify REST API",
+      "reason": "Fastify offers optimal performance and first-class schema validation",
+      "consequences": [
+        "Requests must be validated with Fastify schemas",
+        "Requires a Vitest adapter for HTTP tests"
+      ]
+    }
+  ]
+}

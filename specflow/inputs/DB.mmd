@@ -1,0 +1,21 @@
+---
+title: Specflow Seed DB
+---
+
+erDiagram
+  USERS {
+    uuid id PK
+    string email
+    string password_hash
+    timestamp created_at
+  }
+  TODOS {
+    uuid id PK
+    uuid user_id FK
+    string title
+    string description
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  USERS ||--o{ TODOS : "owns"
