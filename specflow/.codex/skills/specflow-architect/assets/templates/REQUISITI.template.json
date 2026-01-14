@@ -3,7 +3,5 @@
     "name": "project-name",
     "version": "0.1.0"
   },
-  "functionalRequirements": [],
-  "nonFunctionalRequirements": [],
-  "useCases": []
+  "functionalRequirements": []
 }

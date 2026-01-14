@@ -6,12 +6,12 @@
   },
   "constraints": [
     {
-      "id": "C-01",
+      "id": "V-01",
       "type": "security",
       "description": "All data at rest must live on encrypted storage."
     },
     {
-      "id": "C-02",
+      "id": "V-02",
       "type": "budget",
       "description": "Use only managed open-source services."
     }

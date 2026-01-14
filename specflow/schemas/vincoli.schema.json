@@ -8,7 +8,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "pattern": "^C-\\d{2}$" },
+          "id": { "type": "string", "pattern": "^V-\\d{2}$" },
           "type": { "type": "string" },
           "description": { "type": "string" }
         },

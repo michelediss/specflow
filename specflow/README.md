@@ -20,6 +20,20 @@ tests/         # test suites, one test per AC
 
 Generated Markdown views (`*.md`) mirror the JSON files and must never be edited manually.
 
+## Glossary of IDs (sigle)
+
+Queste sono le sigle/ID usate nei vari file JSON per collegare requisiti, casi d’uso, criteri di accettazione, task e contratti.
+
+- `RQ-xx` (Requirement): requisito funzionale in `inputs/REQUISITI.json` (`functionalRequirements[].id`).
+- `UC-xx` (Use Case): caso d’uso in `spec/SPEC.json` (`useCases[].id`).
+- `AC-xx` (Acceptance Criteria): criterio verificabile in `spec/SPEC.json` (`acceptanceCriteria[].id`), collegato a un `UC-xx` e ad almeno un test.
+- `T-xx` (Task): task atomico in `tasks/TASKS.json` (`tasks[].id`), collegato a uno o più `AC-xx`.
+- `D-xx` (Decision): decisione progettuale in `decisions/DECISIONS.json` (`decisions[].id`).
+- `V-xx` (Vincolo): vincolo in `inputs/VINCOLI.json` (`constraints[].id`).
+- `API-xx` (API Contract): contratto API in `spec/SPEC.json` (`contracts.apis[].id`).
+- `OP-xx` (Operation): operazione interna in `spec/SPEC.json` (`operations[].id`), collegata a uno o più `AC-xx`.
+- `DF-xx` (Data Flow): flusso dati in `spec/SPEC.json` (`dataFlows[].id`), collegato a un `UC-xx`.
+
 ### File-by-file tour
 
 ```
@@ -39,7 +53,7 @@ specflow/
 │  │     ├─ SKILL.md       # istruzioni per il ruolo developer
 │  │     └─ assets/examples
 ├─ inputs/
-│  ├─ REQUISITI.json        # requisiti funzionali/non funzionali + UC (fonte di verità)
+│  ├─ REQUISITI.json        # requisiti funzionali (fonte di verità)
 │  ├─ REQUISITI.md          # vista generata – non modificare
 │  ├─ VINCOLI.json          # vincoli business/tecnici
 │  ├─ VINCOLI.md            # vista generata

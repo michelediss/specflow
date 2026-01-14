@@ -23,23 +23,6 @@ async function generateRequirements() {
     }
   }
 
-  lines.push(heading(2, "Non Functional Requirements"));
-  if ((data.nonFunctionalRequirements ?? []).length === 0) {
-    lines.push("*(empty)*");
-  } else {
-    for (const req of data.nonFunctionalRequirements) {
-      lines.push(heading(3, `${req.id} - ${req.title}`));
-      lines.push(req.description ?? "", "");
-    }
-  }
-
-  lines.push(heading(2, "Use Cases"));
-  for (const uc of data.useCases ?? []) {
-    lines.push(heading(3, `${uc.id} - ${uc.title}`));
-    lines.push(bullet(`Actor: ${uc.actor}`));
-    lines.push(uc.description ?? "");
-  }
-
   await writeText("inputs/REQUISITI.md", lines.join("\n").trim() + "\n");
 }
 

@@ -20,17 +20,6 @@
         },
         "required": ["id", "title"]
       }
-    },
-    "nonFunctionalRequirements": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string", "pattern": "^RQ-\\d{2}$" },
-          "title": { "type": "string" }
-        },
-        "required": ["id", "title"]
-      }
     }
   },
   "required": ["meta"]
