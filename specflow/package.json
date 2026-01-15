@@ -1,0 +1,21 @@
+{
+  "name": "specflow",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "specflow:init": "node toolchain/scripts/specflow-init.js",
+    "chain:check": "node toolchain/scripts/chain-check.js && node toolchain/scripts/tests-map.js",
+    "dev:guard": "node toolchain/scripts/dev-guard.js",
+    "dev:branch": "node toolchain/scripts/dev-branch.js",
+    "spec:md": "node toolchain/scripts/generate-md.js",
+    "run:task": "npm run chain:check && npm run dev:guard -- --mode=developer && npm test",
+    "test": "npm --prefix ../app test"
+  },
+  "devDependencies": {
+    "vitest": "^1.5.0"
+  },
+  "dependencies": {
+    "fastify": "^4.26.2"
+  }
+}

@@ -9,13 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Install
-        run: npm install
+        run: |
+          npm install --prefix specflow
+          npm install --prefix app
+
       - name: Chain check
-        run: npm run chain:check
+        run: npm --prefix specflow run chain:check
+
       - name: Dev guard
         run: |
           if [[ "${GITHUB_REF_NAME}" == arch/* ]]; then
@@ -23,10 +29,13 @@ jobs:
           else
             MODE=developer
           fi
-          npm run dev:guard -- --mode=${MODE}
+          node specflow/toolchain/scripts/dev-guard.js --mode=${MODE}
+
       - name: Generate MD
-        run: npm run spec:md
+        run: npm --prefix specflow run spec:md
+
       - name: Fail if md not committed
         run: git diff --exit-code
-      - name: Tests
-        run: npm test
+
+      - name: App tests
+        run: npm --prefix app test

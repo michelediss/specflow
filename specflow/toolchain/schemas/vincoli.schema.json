@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codex/specflow/vincoli.schema.json",
+  "type": "object",
+  "properties": {
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "pattern": "^V-\\d{2}$" },
+          "type": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["id", "type", "description"]
+      }
+    }
+  },
+  "required": ["constraints"]
+}
