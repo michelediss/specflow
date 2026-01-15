@@ -25,9 +25,41 @@
           "tests": {
             "type": "array",
             "items": { "type": "string" }
+          },
+          "manualTests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "status": { "type": "string", "enum": ["pending", "pass", "fail"] },
+                "notes": { "type": "string" },
+                "updatedAt": { "type": "string" }
+              },
+              "required": ["name", "status"]
+            }
+          },
+          "externalTests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "environment": { "type": "string" },
+                "status": { "type": "string", "enum": ["pending", "pass", "fail"] },
+                "evidence": { "type": "string" },
+                "updatedAt": { "type": "string" }
+              },
+              "required": ["name", "status"]
+            }
           }
         },
-        "required": ["id", "useCase", "tests"]
+        "required": ["id", "useCase"],
+        "anyOf": [
+          { "required": ["tests"] },
+          { "required": ["manualTests"] },
+          { "required": ["externalTests"] }
+        ]
       }
     }
   },

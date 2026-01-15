@@ -1,73 +1,84 @@
 # Specflow Operating Guide
 
-Questo documento spiega come adottare e usare il boilerplate Specflow dentro nuovi progetti applicativi (es. una app Vue). Tutti i principi di Spec-Driven Development restano invariati: la verità è nei JSON, le viste `.md` sono generate, ogni AC ha almeno un test e ogni modifica passa prima dalla spec.
+This document explains how to adopt and use the Specflow boilerplate inside new application projects (e.g., a Vue app). The Spec-Driven Development principles stay the same: truth lives in JSON, `.md` views are generated, every AC has at least one test, and every behavioral change starts from the spec.
 
-## Ruoli e responsabilità
+## Roles and responsibilities
 
 ### Architect
-- Aggiorna `inputs/*.json`, `inputs/DB.mmd`, `spec/SPEC.json`, `tasks/TASKS.json`, `decisions/DECISIONS.json`.
-- Rigenera le viste (`npm run spec:md`) e valida la catena (`npm run chain:check`).
-- Condivide i cambi di spec su branch `arch/*` e commit `UC-xx: ...` / `AC-xx: ...`.
-- Non modifica il codice dell’app (`src/`, `tests/` dell’app reale).
+- Updates `inputs/*.json`, `inputs/DB.mmd`, `spec/SPEC.json`, `tasks/TASKS.json`, `decisions/DECISIONS.json`.
+- Regenerates the views (`npm run spec:md`) and validates the chain (`npm run chain:check`).
+- Shares spec changes on `arch/*` branches and uses commit messages like `UC-xx: ...` / `AC-xx: ...`.
+- Does not modify the application code (the real app `src/`, `tests/`).
 
 ### Developer
-- Lavora sui task `T-xx` implementando codice e test minimi per gli AC collegati.
-- Tocca solo `specflow/src/` + `specflow/tests/` se sta mantenendo gli esempi, oppure i file dell’app reale (ad esempio `app/src/` + `app/tests/`).
-- Usa `npm run run:task` (o script equivalenti) per `chain:check + dev:guard + test`.
-- Non altera le fonti di verità (`inputs/`, `spec/`, `tasks/`, `decisions/`, `inputs/DB.mmd`).
+- Works on `T-xx` tasks by implementing the minimal code and tests required by the linked AC.
+- Touches only `specflow/src/` + `specflow/tests/` if maintaining the boilerplate examples, otherwise the real app files (e.g., `app/src/` + `app/tests/`).
+- Uses `npm run run:task` (or equivalent scripts) for `chain:check + dev:guard + test`.
+- Can run `npm run dev:branch -- --task=T-xx` to automatically create the `dev/*` branch for a task.
+- Does not alter the sources of truth (`inputs/`, `spec/`, `tasks/`, `decisions/`, `inputs/DB.mmd`).
 
-## Come riutilizzare il boilerplate
+## How to reuse the boilerplate
 
-1. **Clona o copia la cartella `specflow/`** dentro il nuovo repository (o mantienila come subfolder accanto all’app esistente).
-2. **Installa le dipendenze** all’interno di `specflow/`:
+1. **Clone or copy the `specflow/` folder** into the new repository (or keep it as a subfolder next to an existing app).
+2. **Install dependencies** inside `specflow/`:
    ```bash
    cd specflow
    npm install
    ```
-3. **Esegui `npm run specflow:init`** se ti servono file base vuoti. Copia i template in `inputs/`, `spec/`, `tasks/`, `decisions/` solo quando mancano.
-4. **Modella i requisiti** aggiornando i JSON sotto `inputs/` e `spec/`. Ogni UC deve avere AC collegati e ogni AC deve elencare i test che li copriranno (es. `tests/api/user.test.ts#AC-03`).
-5. **Rigenera le viste** con `npm run spec:md` e controlla che la documentazione generata rifletta il nuovo stato.
-6. **Valida la catena** `UC → AC → Test → Task` con `npm run chain:check`.
-7. **Integra con l’app reale:**
-   - Se l’app vive in un’altra cartella (`frontend/`, `backend/`, ecc.), fai riferimento ai percorsi reali quando annoti i test negli AC.
-   - Usa commit/branch separati (Specflow vs app) per mantenere chiaro quando stai lavorando sulla spec e quando sul codice.
+3. **Run `npm run specflow:init`** if you need empty baseline files. It copies templates into `inputs/`, `spec/`, `tasks/`, `decisions/` only when files are missing.
+4. **Model behavior** by updating JSON under `inputs/` and `spec/`. Each UC should have linked AC, and each AC must list the tests that cover it (e.g., `tests/api/user.test.ts#AC-03`).
+5. **Regenerate views** with `npm run spec:md` and ensure the generated docs reflect the new state.
+6. **Validate the chain** `UC → AC → Test → Task` with `npm run chain:check`.
+7. **Integrate with the real app:**
+   - If the app lives in another folder (`frontend/`, `backend/`, etc.), reference the real paths when listing tests inside AC.
+   - Use separate commits/branches (Specflow vs app) to keep it clear when you are editing spec vs code.
 
-## Script consigliati
+## Recommended scripts
 
-| Script | Uso | Note |
+| Script | Usage | Notes |
 | --- | --- | --- |
-| `npm run specflow:init` | Bootstrap dei file JSON/MD mancanti. | Solo quando un file non esiste ancora. |
-| `npm run spec:md` | Rigenera tutte le viste `.md`. | Obbligatorio in modalità architect prima del commit. |
-| `npm run chain:check` | Verifica che UC/AC/Task/Test siano coerenti. | Da eseguire sempre prima di passare la palla al developer. |
-| `npm run dev:guard -- --mode=architect` | Impedisce di toccare codice/test mentre lavori come architect. | Da includere anche in CI su branch `arch/*`. |
-| `npm run dev:guard -- --mode=developer` | Impedisce di toccare le fonti di verità mentre lavori come developer. | Usa branch `dev/T-xx-*`. |
-| `npm run run:task` | Ciclo completo per i task developer (chain-check + guard + test). | Funziona sui test definiti nel progetto reale. |
+| `npm run specflow:init` | Bootstraps missing JSON/MD files. | Only when a file does not exist yet. |
+| `npm run spec:md` | Regenerates all `.md` views. | Required in architect mode before committing. |
+| `npm run chain:check` | Validates UC/AC/Task/Test consistency. | Always run before handing work to developers. |
+| `npm run dev:guard -- --mode=architect` | Prevents touching code/tests while working as architect. | Include in CI for `arch/*` branches. |
+| `npm run dev:guard -- --mode=developer` | Prevents touching sources of truth while working as developer. | Use on `dev/T-xx-*` branches. |
+| `npm run dev:branch -- --task=T-xx` | Creates a `dev/*` branch for a task. | Helps avoid manual branch naming mistakes. |
+| `npm run run:task` | Full developer loop (chain-check + guard + test). | Runs the automated tests configured in the project. |
 
-## Workflow suggerito per nuovi progetti
+## Suggested workflow for new projects
 
 1. **Architect**
-   - Aggiorna `inputs/*.json` e `spec/SPEC.json` per descrivere il nuovo comportamento (es. UC-02 checkout). Annotare gli AC con i file di test che scriveranno i developer nell’app.
-   - Esegui `npm run spec:md`, `npm run chain:check`, `npm run dev:guard -- --mode=architect`.
-   - Apri PR/commit `arch/...` con JSON + viste aggiornate.
+   - Update `inputs/*.json` and `spec/SPEC.json` to describe the new behavior (e.g., UC-02 checkout). In each AC, reference the test files developers will create in the app.
+   - Run `npm run spec:md`, `npm run chain:check`, `npm run dev:guard -- --mode=architect`.
+   - Open an `arch/...` PR with updated JSON + generated views.
 
 2. **Developer**
-   - Legge `spec/SPEC.md` e `decisions/DECISIONS.md` per capire cosa implementare.
-   - Implementa i test/codice nell’app reale (es. `frontend/tests/checkout.spec.ts`), assicurandosi di includere i tag `AC-xx` richiesti.
-   - Esegue `npm run chain:check` (per assicurarsi che i file di test referenziati esistano) e `npm run dev:guard -- --mode=developer` (dal folder Specflow) più gli script di build/test dell’app.
-   - Consegna su branch `dev/T-xx-*`.
+   - Reads `spec/SPEC.md` and `decisions/DECISIONS.md` to understand what to implement.
+   - Implements tests/code in the real app (e.g., `frontend/tests/checkout.spec.ts`), ensuring the required `AC-xx` tags exist.
+   - Runs `npm run chain:check` (to ensure referenced test files exist) and `npm run dev:guard -- --mode=developer` (from the Specflow folder), plus the app’s build/test scripts.
+   - Delivers on a `dev/T-xx-*` branch.
 
-## Coordinare Specflow con un’app Vue (esempio)
+## Coordinating Specflow with a Vue app (example)
 
-- Mantieni due `package.json`: uno in `specflow/` (Specflow) e uno alla root o in `frontend/` (Vue).
-- Dal punto di vista git, puoi avere due set di branch paralleli (`arch/...` per specflow, `feature/...` per l’app) oppure integrare i cambi in PR coordinate.
-- Quando annoti gli AC, indica percorsi reali dei test Vue, es: `frontend/tests/components/cart.test.ts#AC-05`.
-- Se vuoi far girare tutto in CI, aggiungi step che eseguono prima gli script Specflow (catena/guard/md) e poi la pipeline dell’app.
+- Keep two `package.json`: one in `specflow/` (Specflow) and one at the repo root or in `frontend/` (Vue).
+- Git-wise, you can use two parallel branch sets (`arch/...` for Specflow, `feature/...` for the app) or coordinate changes via PRs.
+- When listing tests in AC, use real Vue test paths, e.g. `frontend/tests/components/cart.test.ts#AC-05`.
+- If you want everything to run in CI, add steps that run the Specflow scripts (chain/guard/md) first, then the app pipeline.
 
-## Regole invarianti
+## Invariants
 
-- Non modificare le viste `.md` a mano.
-- Ogni AC deve avere almeno un test e puntare a un UC valido.
-- Ogni task `T-xx` deve elencare gli AC che soddisfa.
-- Le decisioni non si cancellano: si marcano come `superseded` quando vengono sostituite.
+- Never edit generated `.md` views by hand.
+- Every AC must have at least one test (automated, manual, or external) and reference a valid UC.
+- Every `T-xx` task must list the AC it satisfies.
+- Decisions are never deleted: mark them as `superseded` when replaced.
 
-Con queste linee guida puoi clonare `specflow/` dentro qualsiasi repository e usarlo come layer di governance/spec per nuove app (Vue, React, backend Node, ecc.) mantenendo chiari i confini tra spec e codice applicativo.
+### Manual/external tests
+
+When automated tests are not feasible (external dependencies, staging, UI/hardware), you can declare tests in `spec/SPEC.json` as:
+
+- `manualTests`: manually executed tests with status `pending|pass|fail`
+- `externalTests`: tests executed on an external environment (e.g., staging) with status `pending|pass|fail`
+
+These tests are not executed by `npm test`, but they are validated by `chain:check` (shape and status).
+
+With these guidelines you can clone `specflow/` into any repository and use it as a governance/spec layer for new apps (Vue, React, Node backend, etc.) while keeping clear boundaries between spec and application code.

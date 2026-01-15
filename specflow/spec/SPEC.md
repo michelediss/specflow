@@ -27,12 +27,12 @@
 - Given: A valid payload
 - When: POST /todos
 - Then: Responds 201 with the to-do payload
-- Tests: tests/todos/create.todo.test.ts#AC-01
+- Automated tests: tests/todos/create.todo.test.ts#AC-01
 ### AC-02 -> UC-01
 - Given: Missing title
 - When: POST /todos
 - Then: Responds 422 with code TITLE_REQUIRED
-- Tests: tests/todos/create.todo.test.ts#AC-02
+- Automated tests: tests/todos/create.todo.test.ts#AC-02
 
 ## Contracts
 ### API-01 POST /todos

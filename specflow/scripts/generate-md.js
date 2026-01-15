@@ -88,7 +88,17 @@ async function generateSpec() {
     lines.push(bullet(`Given: ${ac.given}`));
     lines.push(bullet(`When: ${ac.when}`));
     lines.push(bullet(`Then: ${ac.then}`));
-    lines.push(bullet(`Tests: ${(ac.tests ?? []).join(", ")}`));
+    lines.push(bullet(`Automated tests: ${(ac.tests ?? []).join(", ")}`));
+
+    const manual = (ac.manualTests ?? []).map((t) => `${t.name} [${t.status}]`);
+    if (manual.length > 0) {
+      lines.push(bullet(`Manual tests: ${manual.join(", ")}`));
+    }
+
+    const external = (ac.externalTests ?? []).map((t) => `${t.name} [${t.status}]`);
+    if (external.length > 0) {
+      lines.push(bullet(`External tests: ${external.join(", ")}`));
+    }
   }
 
   lines.push("", heading(2, "Contracts"));

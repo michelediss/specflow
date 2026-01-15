@@ -22,64 +22,70 @@ Generated Markdown views (`*.md`) mirror the JSON files and must never be edited
 
 ## Glossary of IDs (sigle)
 
-Queste sono le sigle/ID usate nei vari file JSON per collegare requisiti, casi d’uso, criteri di accettazione, task e contratti.
+These are the IDs used across the JSON files to link requirements, use cases, acceptance criteria, tasks, and contracts.
 
-- `RQ-xx` (Requirement): requisito funzionale in `inputs/REQUISITI.json` (`functionalRequirements[].id`).
-- `UC-xx` (Use Case): caso d’uso in `spec/SPEC.json` (`useCases[].id`).
-- `AC-xx` (Acceptance Criteria): criterio verificabile in `spec/SPEC.json` (`acceptanceCriteria[].id`), collegato a un `UC-xx` e ad almeno un test.
-- `T-xx` (Task): task atomico in `tasks/TASKS.json` (`tasks[].id`), collegato a uno o più `AC-xx`.
-- `D-xx` (Decision): decisione progettuale in `decisions/DECISIONS.json` (`decisions[].id`).
-- `V-xx` (Vincolo): vincolo in `inputs/VINCOLI.json` (`constraints[].id`).
-- `API-xx` (API Contract): contratto API in `spec/SPEC.json` (`contracts.apis[].id`).
-- `OP-xx` (Operation): operazione interna in `spec/SPEC.json` (`operations[].id`), collegata a uno o più `AC-xx`.
-- `DF-xx` (Data Flow): flusso dati in `spec/SPEC.json` (`dataFlows[].id`), collegato a un `UC-xx`.
+- `RQ-xx` (Requirement): functional requirement in `inputs/REQUISITI.json` (`functionalRequirements[].id`).
+- `UC-xx` (Use Case): use case in `spec/SPEC.json` (`useCases[].id`).
+- `AC-xx` (Acceptance Criteria): verifiable criterion in `spec/SPEC.json` (`acceptanceCriteria[].id`), linked to a `UC-xx` and at least one test entry.
+- `T-xx` (Task): atomic task in `tasks/TASKS.json` (`tasks[].id`), linked to one or more `AC-xx`.
+- `D-xx` (Decision): architectural decision in `decisions/DECISIONS.json` (`decisions[].id`).
+- `V-xx` (Constraint): constraint in `inputs/VINCOLI.json` (`constraints[].id`).
+- `API-xx` (API Contract): API contract in `spec/SPEC.json` (`contracts.apis[].id`).
+- `OP-xx` (Operation): internal operation in `spec/SPEC.json` (`operations[].id`), linked to one or more `AC-xx`.
+- `DF-xx` (Data Flow): data flow in `spec/SPEC.json` (`dataFlows[].id`), linked to a `UC-xx`.
+
+Notes on test types inside AC:
+- `acceptanceCriteria[].tests`: automated tests (file path + `#AC-xx`), executed by `npm test`.
+- `acceptanceCriteria[].manualTests`: manual tests tracked in the spec with `status: pending|pass|fail`.
+- `acceptanceCriteria[].externalTests`: tests run in external environments (e.g., staging) tracked in the spec with `status: pending|pass|fail`.
 
 ### File-by-file tour
 
 ```
 specflow/
-├─ AGENTS.md                # contratto operativo (ruoli, workflow, CI)
-├─ README.md                # questo documento
-├─ package.json             # scripts npm e dipendenze per il boilerplate
-├─ .codex/                  # skill locali e template usati da Codex CLI
+├─ AGENTS.md                # operating guide (roles, workflow, CI)
+├─ README.md                # this document
+├─ package.json             # npm scripts and dependencies for the boilerplate
+├─ .codex/                  # local skills and templates used by Codex CLI
 │  ├─ skills/
 │  │  ├─ specflow-architect/
-│  │  │  ├─ SKILL.md        # istruzioni per il ruolo architect
+│  │  │  ├─ SKILL.md        # instructions for the architect role
 │  │  │  ├─ assets/
-│  │  │  │  ├─ templates/  # file base copiati da `specflow:init`
-│  │  │  │  └─ examples/   # snippet di riferimento
+│  │  │  │  ├─ templates/  # baseline files copied by `specflow:init`
+│  │  │  │  └─ examples/   # reference snippets
 │  │  │  └─ README.md
 │  │  └─ specflow-developer/
-│  │     ├─ SKILL.md       # istruzioni per il ruolo developer
+│  │     ├─ SKILL.md       # instructions for the developer role
 │  │     └─ assets/examples
 ├─ inputs/
-│  ├─ REQUISITI.json        # requisiti funzionali (fonte di verità)
-│  ├─ REQUISITI.md          # vista generata – non modificare
-│  ├─ VINCOLI.json          # vincoli business/tecnici
-│  ├─ VINCOLI.md            # vista generata
-│  ├─ STACK.json            # stack tecnologico dichiarato via Context7
-│  ├─ STACK.md              # vista generata
-│  └─ DB.mmd                # schema ER in Mermaid
+│  ├─ REQUISITI.json        # functional requirements (source of truth)
+│  ├─ REQUISITI.md          # generated view – do not edit
+│  ├─ VINCOLI.json          # business/technical constraints
+│  ├─ VINCOLI.md            # generated view
+│  ├─ STACK.json            # declared tech stack (may be filled using Context7)
+│  ├─ STACK.md              # generated view
+│  └─ DB.mmd                # Mermaid ER diagram (DB contract)
 ├─ spec/
-│  ├─ SPEC.json             # UC, AC, contratti, data flow e DB (fonte di verità)
-│  └─ SPEC.md               # vista generata della spec
+│  ├─ SPEC.json             # UC, AC, contracts, data flows and DB (source of truth)
+│  └─ SPEC.md               # generated spec view
 ├─ tasks/
-│  ├─ TASKS.json            # task T-xx collegati agli AC
-│  └─ TASKS.md              # vista generata
+│  ├─ TASKS.json            # T-xx tasks linked to AC
+│  └─ TASKS.md              # generated view
 ├─ decisions/
-│  ├─ DECISIONS.json        # decision log (status, motivazioni, conseguenze)
-│  └─ DECISIONS.md          # vista generata
+│  ├─ DECISIONS.json        # decision log (status, reasons, consequences)
+│  └─ DECISIONS.md          # generated view
 ├─ scripts/
-│  ├─ specflow-init.js      # copia i template se mancano file di input
-│  ├─ chain-check.js        # verifica la catena UC → AC → Task/test
-│  ├─ tests-map.js          # stampa la mappa AC → test (presenza file)
-│  ├─ dev-guard.js          # blocca modifiche non permesse a seconda del ruolo
-│  ├─ generate-md.js        # rigenera tutte le viste Markdown
+│  ├─ specflow-init.js      # copies templates when input files are missing
+│  ├─ chain-check.js        # validates UC → AC → Task/tests chain
+│  ├─ tests-map.js          # prints AC → tests map (file presence/status)
+│  ├─ dev-guard.js          # blocks forbidden changes depending on the role
+│  ├─ dev-branch.js         # creates a `dev/*` branch from a `T-xx`
+│  ├─ generate-md.js        # regenerates all Markdown views
 │  └─ utils/
 │     ├─ fs.js              # helper file I/O
-│     ├─ format.js          # helper di formattazione Markdown
-│     └─ ids.js             # validatori di id (UC/AC/T)
-├─ schemas/                 # JSON Schema di supporto per i file di input
+│     ├─ format.js          # Markdown formatting helpers
+│     └─ ids.js             # id validators (UC/AC/T)
+├─ schemas/                 # JSON Schemas for input/reference
 │  ├─ requisiti.schema.json
 │  ├─ vincoli.schema.json
 │  ├─ stack.schema.json
@@ -87,9 +93,9 @@ specflow/
 │  ├─ tasks.schema.json
 │  └─ decisions.schema.json
 ├─ src/
-│  └─ todos/createTodo.js   # implementazione di esempio per AC-01/AC-02
+│  └─ todos/createTodo.js   # example implementation for AC-01/AC-02
 └─ tests/
-   └─ todos/create.todo.test.ts  # test Vitest che coprono gli AC di esempio
+   └─ todos/create.todo.test.ts  # Vitest tests covering the sample AC
 ```
 
 ## Prerequisites
@@ -110,11 +116,12 @@ npm install
 | --- | --- | --- |
 | `npm run specflow:init` | Copies the latest templates from `.codex/skills/specflow-architect/assets/templates` into the repo, skipping files that already exist. | First-time setup of a repo or when onboarding a new Specflow project. Architect-only. |
 | `npm run spec:md` | Converts every JSON source (`inputs/`, `spec/`, `tasks/`, `decisions/`) into the corresponding Markdown view. Uses `scripts/generate-md.js`. | After any JSON change in architect mode. Also part of CI to ensure `.md` matches the JSON. |
-| `npm run chain:check` | Runs `scripts/chain-check.js` and `scripts/tests-map.js` to validate UC → AC → Task links, verify that each AC references real tests, and print the AC→test matrix. | Before every commit and inside CI. Both architect and developer should run it to ensure references are intact. |
+| `npm run chain:check` | Runs `scripts/chain-check.js` and `scripts/tests-map.js` to validate UC → AC → Task links, verify that each AC has coverage (automated/manual/external), and print the AC→test matrix. | Before every commit and inside CI. Both architect and developer should run it to ensure references are intact. |
 | `npm run dev:guard -- --mode=architect` | Ensures there are no staged/working changes in `src/` or `tests/`. Fails otherwise. | Architect mode. Use it before committing or as part of CI on `arch/*` branches. |
 | `npm run dev:guard -- --mode=developer` | Blocks modifications to `inputs/**`, `spec/**`, `tasks/**`, `decisions/**`, and `inputs/DB.mmd`. | Developer mode. Run before committing or during CI on `dev/*` branches. |
+| `npm run dev:branch -- --task=T-xx` | Creates a `dev/*` git branch for a task in `tasks/TASKS.json` (optionally checks it out). | At the start of developer work for a specific `T-xx`. |
 | `npm run run:task` | Shortcut for the developer loop: `npm run chain:check && npm run dev:guard -- --mode=developer && npm test`. | Developer mode when implementing a `T-xx`. |
-| `npm test` | Executes the Vitest suite. Each AC listed in the spec must have at least one test tagged with its id. | Any time tests need to run (developer workflow, CI). |
+| `npm test` | Executes the Vitest suite (automated tests only). Manual/external tests are not executed by the runner; their status is tracked inside `spec/SPEC.json`. | Any time automated tests need to run (developer workflow, CI). |
 
 ### Script internals
 
@@ -122,11 +129,39 @@ npm install
 - `scripts/generate-md.js` loads JSON via `scripts/utils/fs.js`, formats sections with helpers from `scripts/utils/format.js`, and writes Markdown views into `inputs/*.md`, `spec/SPEC.md`, `tasks/TASKS.md`, and `decisions/DECISIONS.md`.
 - `scripts/chain-check.js` enforces the integrity chain:
   - Specs must declare at least one UC.
-  - Every AC references a valid UC and lists one or more tests.
+  - Every AC references a valid UC and has at least one test entry of any type: automated, manual, or external.
   - Each test reference points to an existing file that contains the `AC-xx` tag.
   - Every task references existing AC ids.
-- `scripts/tests-map.js` prints a summary of which tests implement each AC and whether their files exist.
+- `scripts/tests-map.js` prints an AC→tests summary including automated file presence and manual/external status.
 - `scripts/dev-guard.js` inspects `git status --porcelain` and aborts if forbidden paths were modified for the chosen mode.
+- `scripts/dev-branch.js` reads `tasks/TASKS.json` and creates a `dev/T-xx-<slug>` branch from the current HEAD (and checks it out by default).
+
+## Test types in `SPEC.json`
+
+Each `acceptanceCriteria[]` can declare coverage in three ways:
+
+- `tests`: automated tests (`path/to/test.ts#AC-xx`). These must exist on disk and contain the `AC-xx` tag.
+- `manualTests`: manual checks tracked in the spec with `status: pending|pass|fail`.
+- `externalTests`: checks run in an external environment (e.g., staging) tracked in the spec with `status: pending|pass|fail` plus optional `environment`/`evidence`.
+
+Minimal example:
+
+```json
+{
+  "id": "AC-10",
+  "useCase": "UC-02",
+  "given": "...",
+  "when": "...",
+  "then": "...",
+  "tests": ["frontend/tests/checkout.test.ts#AC-10"],
+  "manualTests": [{ "name": "QA checklist checkout", "status": "pending" }],
+  "externalTests": [{ "name": "Staging smoke", "environment": "staging", "status": "pass" }]
+}
+```
+
+Notes:
+- `npm test` only runs `tests` (automated).
+- `npm run chain:check` validates that every AC has at least one test entry (any type) and that automated test files exist.
 
 ## Working modes
 
@@ -157,6 +192,57 @@ The repo-level workflow `../.github/workflows/ci.yml` performs the following ste
 5. `npm test`
 
 This mirrors the expected local workflow and guarantees that JSON and Markdown never diverge.
+
+## Git (mini cheat sheet)
+
+Minimal path to work with branches + PRs (no Git expertise required).
+
+### 6 core commands
+
+From the repo root (not inside `specflow/`):
+
+- See your current branch and what changed: `git status`
+- Create and switch to a new branch: `git checkout -b arch/UC-02-checkout` or `git checkout -b dev/T-05-implement-AC-10`
+- (Alternative for dev tasks) Create a branch from a task: `cd specflow && npm run dev:branch -- --task=T-05`
+- Inspect changes (optional): `git diff`
+- Stage files for commit: `git add specflow` (or `git add <file>` to be more selective)
+- Create a commit: `git commit -m "UC-02: define checkout flow"` or `git commit -m "T-05: implement AC-10"`
+- Push to GitHub: `git push -u origin <branch-name>`
+
+### What is a Pull Request (PR)?
+
+A PR is a request on GitHub to merge your branch into the main branch (`main`/`master`). It is used to:
+- run CI automatically
+- review changes
+- keep discussion/history in one place
+
+### Typical Specflow flow
+
+- **Architect** (spec): uses `arch/*`, edits JSON + regenerates `.md` views, then opens a PR.
+- **Developer** (code/tests): uses `dev/*`, edits only code/tests, then opens a PR.
+
+### Automatic dev branch creation
+
+From inside `specflow/`:
+
+```bash
+npm run dev:branch -- --task=T-01
+```
+
+Behavior:
+- creates `dev/T-01-<task-title-slug>` (if missing)
+- checks out the branch (default)
+- prints a short summary (task id, AC, suggested files)
+
+Options:
+- `--checkout=false` to create the branch without checking it out
+
+### How to open a PR (practical)
+
+1. Push your branch with `git push`.
+2. Go to GitHub → repository → you should see “Compare & pull request” (or go to “Pull requests” → “New pull request”).
+3. Select base = `main/master`, compare = your branch (`arch/...` or `dev/...`).
+4. Create the PR and wait for the pipeline to be green before merging.
 
 ## Skills & prompts
 

@@ -26,16 +26,22 @@ async function main() {
       issues.push(`AC ${ac.id} references missing use case ${ac.useCase}`);
     }
 
-    if (!Array.isArray(ac.tests) || ac.tests.length === 0) {
-      issues.push(`AC ${ac.id} has no associated tests`);
+    const automatedTests = Array.isArray(ac.tests) ? ac.tests : [];
+    const manualTests = Array.isArray(ac.manualTests) ? ac.manualTests : [];
+    const externalTests = Array.isArray(ac.externalTests) ? ac.externalTests : [];
+
+    // At least one test must exist: automated (file-based) OR manual OR external.
+    if (automatedTests.length + manualTests.length + externalTests.length === 0) {
+      issues.push(`AC ${ac.id} has no associated tests (automated/manual/external)`);
       continue;
     }
 
-    for (const testRef of ac.tests) {
+    // Automated tests must exist on disk and include the AC id tag.
+    for (const testRef of automatedTests) {
       const [filePath] = testRef.split("#");
       const resolved = path.resolve(filePath);
       if (!(await fileExists(resolved))) {
-        issues.push(`Missing test for ${ac.id}: ${filePath}`);
+        issues.push(`Missing automated test for ${ac.id}: ${filePath}`);
         continue;
       }
 
@@ -43,6 +49,34 @@ async function main() {
       // Enforce tagging (AC-xx) so we can prove coverage by reading the file.
       if (!fileContent.includes(ac.id)) {
         issues.push(`File ${filePath} does not contain tag ${ac.id}`);
+      }
+    }
+
+    // Manual/external tests are tracked in SPEC.json and can be marked pass/fail/pending.
+    // They are not executed by the runner, but they must be well-formed.
+    for (const manual of manualTests) {
+      if (!manual || typeof manual !== "object") {
+        issues.push(`AC ${ac.id} has an invalid manualTests entry (expected object)`);
+        continue;
+      }
+      if (typeof manual.name !== "string" || manual.name.trim() === "") {
+        issues.push(`AC ${ac.id} has a manual test with missing name`);
+      }
+      if (!["pending", "pass", "fail"].includes(manual.status)) {
+        issues.push(`AC ${ac.id} manual test '${manual.name ?? "?"}' has invalid status`);
+      }
+    }
+
+    for (const external of externalTests) {
+      if (!external || typeof external !== "object") {
+        issues.push(`AC ${ac.id} has an invalid externalTests entry (expected object)`);
+        continue;
+      }
+      if (typeof external.name !== "string" || external.name.trim() === "") {
+        issues.push(`AC ${ac.id} has an external test with missing name`);
+      }
+      if (!["pending", "pass", "fail"].includes(external.status)) {
+        issues.push(`AC ${ac.id} external test '${external.name ?? "?"}' has invalid status`);
       }
     }
   }
