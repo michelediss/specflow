@@ -42,7 +42,7 @@ async function main() {
     process.exit(1);
   }
 
-  const tasks = await readJson("tasks/TASKS.json");
+  const tasks = await readJson("tasks/tasks.json");
   const task = (tasks.tasks ?? []).find((item) => item.id === taskId);
   if (!task) {
     console.error(`Task not found: ${taskId}`);
@@ -81,4 +81,3 @@ main().catch((error) => {
   console.error("dev-branch failed", error);
   process.exitCode = 1;
 });
-

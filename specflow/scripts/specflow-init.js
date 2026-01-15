@@ -6,12 +6,12 @@ import { ensureDir, fileExists } from "./utils/fs.js";
 const TEMPLATE_DIR = path.resolve(".codex/skills/specflow-architect/assets/templates");
 
 const FILES = [
-  { template: "REQUISITI.template.json", target: "inputs/REQUISITI.json" },
-  { template: "VINCOLI.template.json", target: "inputs/VINCOLI.json" },
-  { template: "STACK.template.json", target: "inputs/STACK.json" },
-  { template: "SPEC.template.json", target: "spec/SPEC.json" },
-  { template: "TASKS.template.json", target: "tasks/TASKS.json" },
-  { template: "DECISIONS.template.json", target: "decisions/DECISIONS.json" }
+  { template: "requirements.template.json", target: "inputs/requirements.json" },
+  { template: "constraints.template.json", target: "inputs/constraints.json" },
+  { template: "stack.template.json", target: "inputs/stack.json" },
+  { template: "spec.template.json", target: "spec/spec.json" },
+  { template: "tasks.template.json", target: "tasks/tasks.json" },
+  { template: "decisions.template.json", target: "decisions/decisions.json" }
 ];
 
 /**

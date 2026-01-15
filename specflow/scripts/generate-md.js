@@ -2,10 +2,10 @@ import { readJson, writeText } from "./utils/fs.js";
 import { heading, bullet } from "./utils/format.js";
 
 /**
- * Requirements view mirrors inputs/REQUISITI.json to let humans scan the spec without touching JSON.
+ * Requirements view mirrors inputs/requirements.json to let humans scan the spec without touching JSON.
  */
 async function generateRequirements() {
-  const data = await readJson("inputs/REQUISITI.json");
+  const data = await readJson("inputs/requirements.json");
   const lines = [heading(1, "REQUIREMENTS"), ""];
 
   lines.push(heading(2, "Meta"));
@@ -23,27 +23,27 @@ async function generateRequirements() {
     }
   }
 
-  await writeText("inputs/REQUISITI.md", lines.join("\n").trim() + "\n");
+  await writeText("inputs/requirements.md", lines.join("\n").trim() + "\n");
 }
 
 /**
  * Constraints view exposes legal/budget/tech constraints in plain Markdown.
  */
 async function generateConstraints() {
-  const data = await readJson("inputs/VINCOLI.json");
+  const data = await readJson("inputs/constraints.json");
   const lines = [heading(1, "CONSTRAINTS"), "", heading(2, "List")];
   for (const constraint of data.constraints ?? []) {
     lines.push(heading(3, `${constraint.id} (${constraint.type})`));
     lines.push(constraint.description ?? "", "");
   }
-  await writeText("inputs/VINCOLI.md", lines.join("\n").trim() + "\n");
+  await writeText("inputs/constraints.md", lines.join("\n").trim() + "\n");
 }
 
 /**
  * Stack view summarizes runtime/framework/DB choices for quick inspection.
  */
 async function generateStack() {
-  const data = await readJson("inputs/STACK.json");
+  const data = await readJson("inputs/stack.json");
   const lines = [heading(1, "STACK"), ""];
   for (const [group, values] of Object.entries(data)) {
     lines.push(heading(2, group));
@@ -52,14 +52,14 @@ async function generateStack() {
     }
     lines.push("");
   }
-  await writeText("inputs/STACK.md", lines.join("\n").trim() + "\n");
+  await writeText("inputs/stack.md", lines.join("\n").trim() + "\n");
 }
 
 /**
  * Spec view stitches together UC/AC/contracts/flows/db to produce SPEC.md.
  */
 async function generateSpec() {
-  const spec = await readJson("spec/SPEC.json");
+  const spec = await readJson("spec/spec.json");
   const lines = [heading(1, "SPEC"), ""];
   lines.push(heading(2, "Meta"));
   for (const [key, value] of Object.entries(spec.meta ?? {})) {
@@ -135,35 +135,35 @@ async function generateSpec() {
     (table.columns ?? []).forEach((col) => lines.push(bullet(`${col.name} ${col.type}`)));
   }
 
-  await writeText("spec/SPEC.md", lines.join("\n").trim() + "\n");
+  await writeText("spec/spec.md", lines.join("\n").trim() + "\n");
 }
 
 /**
  * Task view gives developers a human-friendly list of T-xx with linked AC/file hints.
  */
 async function generateTasks() {
-  const tasks = await readJson("tasks/TASKS.json");
+  const tasks = await readJson("tasks/tasks.json");
   const lines = [heading(1, "TASKS"), ""];
   for (const task of tasks.tasks ?? []) {
     lines.push(heading(2, `${task.id} - ${task.title}`));
     lines.push(bullet(`AC: ${(task.acceptanceCriteria ?? []).join(", ")}`));
     lines.push(bullet(`Files: ${(task.files ?? []).join(", ")}`));
   }
-  await writeText("tasks/TASKS.md", lines.join("\n").trim() + "\n");
+  await writeText("tasks/tasks.md", lines.join("\n").trim() + "\n");
 }
 
 /**
  * Decision view summarizes the ADR log (status/date) for quick reference.
  */
 async function generateDecisions() {
-  const decisions = await readJson("decisions/DECISIONS.json");
+  const decisions = await readJson("decisions/decisions.json");
   const lines = [heading(1, "DECISIONS"), ""];
   for (const decision of decisions.decisions ?? []) {
     lines.push(heading(2, `${decision.id} - ${decision.title}`));
     lines.push(bullet(`Status: ${decision.status}`));
     lines.push(bullet(`Date: ${decision.date}`));
   }
-  await writeText("decisions/DECISIONS.md", lines.join("\n").trim() + "\n");
+  await writeText("decisions/decisions.md", lines.join("\n").trim() + "\n");
 }
 
 async function main() {

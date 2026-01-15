@@ -1,7 +1,7 @@
 # REQUIREMENTS
 
 ## Meta
-- name: specflow-seed
+- name: specflow
 - version: 0.1.0
 - updatedAt: 2024-04-01
 

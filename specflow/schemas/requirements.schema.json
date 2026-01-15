@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://codex/specflow/requisiti.schema.json",
+  "$id": "https://codex/specflow/requirements.schema.json",
   "type": "object",
   "properties": {
     "meta": {

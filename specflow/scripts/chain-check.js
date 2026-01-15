@@ -1,14 +1,20 @@
 import path from "node:path";
+import { execSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { readJson, fileExists } from "./utils/fs.js";
+
+function repoRoot() {
+  return execSync("git rev-parse --show-toplevel", { encoding: "utf8" }).trim();
+}
 
 /**
  * Validates the full UC -> AC -> Test -> Task chain to ensure we can trace
  * every acceptance criterion back to a real use case and forward to real tests/tasks.
  */
 async function main() {
-  const spec = await readJson("spec/SPEC.json");
-  const tasks = await readJson("tasks/TASKS.json");
+  const root = repoRoot();
+  const spec = await readJson("spec/spec.json");
+  const tasks = await readJson("tasks/tasks.json");
   const issues = [];
 
   // Without at least one UC the rest of the chain makes no sense.
@@ -39,7 +45,7 @@ async function main() {
     // Automated tests must exist on disk and include the AC id tag.
     for (const testRef of automatedTests) {
       const [filePath] = testRef.split("#");
-      const resolved = path.resolve(filePath);
+      const resolved = path.resolve(root, filePath);
       if (!(await fileExists(resolved))) {
         issues.push(`Missing automated test for ${ac.id}: ${filePath}`);
         continue;
@@ -52,7 +58,7 @@ async function main() {
       }
     }
 
-    // Manual/external tests are tracked in SPEC.json and can be marked pass/fail/pending.
+    // Manual/external tests are tracked in spec/spec.json and can be marked pass/fail/pending.
     // They are not executed by the runner, but they must be well-formed.
     for (const manual of manualTests) {
       if (!manual || typeof manual !== "object") {

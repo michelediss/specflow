@@ -7,20 +7,20 @@ The technical contract is already fixed.
 
 ## Sources of truth
 You can only read:
-- `spec/SPEC.json`
-- `decisions/DECISIONS.json`
-- `tasks/TASKS.json`
+- `spec/spec.json`
+- `decisions/decisions.json`
+- `tasks/tasks.json`
 
 ## Files you can modify
-- `tests/**`
-- `src/**`
+- `app/tests/**`
+- `app/src/**`
 
 ## Forbidden
 You must never modify:
 - `inputs/**`
-- `spec/SPEC.json`
-- `decisions/DECISIONS.json`
-- `inputs/DB.mmd`
+- `spec/spec.json`
+- `decisions/decisions.json`
+- `inputs/db.mmd`
 
 If a spec/decision change is required:
 stop and ask to switch back to architect mode.
@@ -29,9 +29,9 @@ stop and ask to switch back to architect mode.
 
 When you receive `T-xx`:
 
-1. Read the linked `AC-xx` in `tasks/TASKS.json`.
+1. Read the linked `AC-xx` in `tasks/tasks.json`.
 2. For each AC:
-   - read `spec/SPEC.json`
+   - read `spec/spec.json`
    - write/update the tests that verify it
 3. Implement the minimal code to make those tests pass.
 4. Run: `npm run run:task`

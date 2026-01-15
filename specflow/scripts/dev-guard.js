@@ -40,7 +40,13 @@ function enforceArchitect(files) {
  * Developer mode forbids editing the single source of truth (inputs/spec/tasks/decisions + DB schema).
  */
 function enforceDeveloper(files) {
-  const forbiddenPrefixes = ["inputs/", "spec/", "decisions/", "tasks/", "inputs/DB.mmd"];
+  const forbiddenPrefixes = [
+    "specflow/inputs/",
+    "specflow/spec/",
+    "specflow/decisions/",
+    "specflow/tasks/",
+    "specflow/inputs/db.mmd"
+  ];
   const violations = files.filter((file) =>
     forbiddenPrefixes.some((prefix) => file === prefix || file.startsWith(prefix))
   );

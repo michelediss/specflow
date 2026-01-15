@@ -5,17 +5,16 @@ This document explains how to adopt and use the Specflow boilerplate inside new 
 ## Roles and responsibilities
 
 ### Architect
-- Updates `inputs/*.json`, `inputs/DB.mmd`, `spec/SPEC.json`, `tasks/TASKS.json`, `decisions/DECISIONS.json`.
+- Updates `inputs/*.json`, `inputs/db.mmd`, `spec/spec.json`, `tasks/tasks.json`, `decisions/decisions.json`.
 - Regenerates the views (`npm run spec:md`) and validates the chain (`npm run chain:check`).
 - Shares spec changes on `arch/*` branches and uses commit messages like `UC-xx: ...` / `AC-xx: ...`.
-- Does not modify the application code (the real app `src/`, `tests/`).
+- Does not modify the application code (the real app `app/src/`, `app/tests/`).
 
 ### Developer
 - Works on `T-xx` tasks by implementing the minimal code and tests required by the linked AC.
-- Touches only `specflow/src/` + `specflow/tests/` if maintaining the boilerplate examples, otherwise the real app files (e.g., `app/src/` + `app/tests/`).
 - Uses `npm run run:task` (or equivalent scripts) for `chain:check + dev:guard + test`.
 - Can run `npm run dev:branch -- --task=T-xx` to automatically create the `dev/*` branch for a task.
-- Does not alter the sources of truth (`inputs/`, `spec/`, `tasks/`, `decisions/`, `inputs/DB.mmd`).
+- Does not alter the sources of truth (`specflow/inputs/`, `specflow/spec/`, `specflow/tasks/`, `specflow/decisions/`, `specflow/inputs/db.mmd`).
 
 ## How to reuse the boilerplate
 
@@ -48,12 +47,12 @@ This document explains how to adopt and use the Specflow boilerplate inside new 
 ## Suggested workflow for new projects
 
 1. **Architect**
-   - Update `inputs/*.json` and `spec/SPEC.json` to describe the new behavior (e.g., UC-02 checkout). In each AC, reference the test files developers will create in the app.
+   - Update `inputs/*.json` and `spec/spec.json` to describe the new behavior (e.g., UC-02 checkout). In each AC, reference the test files developers will create in the app.
    - Run `npm run spec:md`, `npm run chain:check`, `npm run dev:guard -- --mode=architect`.
    - Open an `arch/...` PR with updated JSON + generated views.
 
 2. **Developer**
-   - Reads `spec/SPEC.md` and `decisions/DECISIONS.md` to understand what to implement.
+   - Reads `spec/spec.md` and `decisions/decisions.md` to understand what to implement.
    - Implements tests/code in the real app (e.g., `frontend/tests/checkout.spec.ts`), ensuring the required `AC-xx` tags exist.
    - Runs `npm run chain:check` (to ensure referenced test files exist) and `npm run dev:guard -- --mode=developer` (from the Specflow folder), plus the app’s build/test scripts.
    - Delivers on a `dev/T-xx-*` branch.
@@ -71,14 +70,14 @@ This document explains how to adopt and use the Specflow boilerplate inside new 
 - Every AC must have at least one test (automated, manual, or external) and reference a valid UC.
 - Every `T-xx` task must list the AC it satisfies.
 - Decisions are never deleted: mark them as `superseded` when replaced.
+- If a rule in this file conflicts with a project-specific instruction, this file wins.
 
 ### Manual/external tests
 
-When automated tests are not feasible (external dependencies, staging, UI/hardware), you can declare tests in `spec/SPEC.json` as:
+When automated tests are not feasible (external dependencies, staging, UI/hardware), you can declare tests in `spec/spec.json` as:
 
 - `manualTests`: manually executed tests with status `pending|pass|fail`
 - `externalTests`: tests executed on an external environment (e.g., staging) with status `pending|pass|fail`
+- Manual and external tests can satisfy an AC logically, but do not replace automated tests in CI unless explicitly approved.
 
 These tests are not executed by `npm test`, but they are validated by `chain:check` (shape and status).
-
-With these guidelines you can clone `specflow/` into any repository and use it as a governance/spec layer for new apps (Vue, React, Node backend, etc.) while keeping clear boundaries between spec and application code.

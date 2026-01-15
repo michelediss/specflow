@@ -1,7 +1,7 @@
 # SPEC
 
 ## Meta
-- name: specflow-seed
+- name: specflow
 - version: 0.1.0
 
 ## Scope
