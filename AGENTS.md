@@ -8,20 +8,19 @@ This document explains how to adopt and use the Specflow boilerplate inside new 
 - Updates `inputs/*.json`, `inputs/db.mmd`, `spec/spec.json`, `tasks/tasks.json`, `decisions/decisions.json`.
 - Regenerates the views (`npm run spec:md`) and validates the chain (`npm run chain:check`).
 - Shares spec changes on `arch/*` branches and uses commit messages like `UC-xx: ...` / `AC-xx: ...`.
-- Does not modify the application code (the real app `app/src/`, `app/tests/`).
+- Does not modify the application code (`src/`, `tests/`).
 
 ### Developer
 - Works on `T-xx` tasks by implementing the minimal code and tests required by the linked AC.
 - Uses `npm run run:task` (or equivalent scripts) for `chain:check + dev:guard + test`.
 - Can run `npm run dev:branch -- --task=T-xx` to automatically create the `dev/*` branch for a task.
-- Does not alter the sources of truth (`specflow/inputs/`, `specflow/spec/`, `specflow/tasks/`, `specflow/decisions/`, `specflow/inputs/db.mmd`).
+- Does not alter the sources of truth (`inputs/`, `spec/`, `tasks/`, `decisions/`, `inputs/db.mmd`).
 
 ## How to reuse the boilerplate
 
-1. **Clone or copy the `specflow/` folder** into the new repository (or keep it as a subfolder next to an existing app).
-2. **Install dependencies** inside `specflow/`:
+1. **Clone or copy the Specflow files** into the new repository (root-level folders such as `inputs/`, `spec/`, `tasks/`, `decisions/`, `scripts/`, `schemas/`).
+2. **Install dependencies** at the repo root:
    ```bash
-   cd specflow
    npm install
    ```
 3. **Run `npm run specflow:init`** if you need empty baseline files. It copies templates into `inputs/`, `spec/`, `tasks/`, `decisions/` only when files are missing.
@@ -54,12 +53,12 @@ This document explains how to adopt and use the Specflow boilerplate inside new 
 2. **Developer**
    - Reads `spec/spec.md` and `decisions/decisions.md` to understand what to implement.
    - Implements tests/code in the real app (e.g., `frontend/tests/checkout.spec.ts`), ensuring the required `AC-xx` tags exist.
-   - Runs `npm run chain:check` (to ensure referenced test files exist) and `npm run dev:guard -- --mode=developer` (from the Specflow folder), plus the app’s build/test scripts.
+   - Runs `npm run chain:check` (to ensure referenced test files exist) and `npm run dev:guard -- --mode=developer`, plus the app’s build/test scripts.
    - Delivers on a `dev/T-xx-*` branch.
 
 ## Coordinating Specflow with a Vue app (example)
 
-- Keep two `package.json`: one in `specflow/` (Specflow) and one at the repo root or in `frontend/` (Vue).
+- If the Vue app keeps its own `package.json`, either use workspaces or keep Specflow tooling in a separate folder.
 - Git-wise, you can use two parallel branch sets (`arch/...` for Specflow, `feature/...` for the app) or coordinate changes via PRs.
 - When listing tests in AC, use real Vue test paths, e.g. `frontend/tests/components/cart.test.ts#AC-05`.
 - If you want everything to run in CI, add steps that run the Specflow scripts (chain/guard/md) first, then the app pipeline.

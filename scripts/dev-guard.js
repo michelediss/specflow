@@ -41,11 +41,11 @@ function enforceArchitect(files) {
  */
 function enforceDeveloper(files) {
   const forbiddenPrefixes = [
-    "specflow/inputs/",
-    "specflow/spec/",
-    "specflow/decisions/",
-    "specflow/tasks/",
-    "specflow/inputs/db.mmd"
+    "inputs/",
+    "spec/",
+    "decisions/",
+    "tasks/",
+    "inputs/db.mmd"
   ];
   const violations = files.filter((file) =>
     forbiddenPrefixes.some((prefix) => file === prefix || file.startsWith(prefix))

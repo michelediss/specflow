@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  specflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm install
+      - name: Chain check
+        run: npm run chain:check
+      - name: Dev guard
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == arch/* ]]; then
+            MODE=architect
+          else
+            MODE=developer
+          fi
+          npm run dev:guard -- --mode=${MODE}
+      - name: Generate MD
+        run: npm run spec:md
+      - name: Fail if md not committed
+        run: git diff --exit-code
+      - name: Tests
+        run: npm test
